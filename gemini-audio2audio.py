@@ -2,10 +2,17 @@ import asyncio
 import wave
 from google import genai
 
-client = genai.Client()
-model = "gemini-live-2.5-flash-preview"
+client = genai.Client(http_options={"api_version": "v1alpha"})
+model = "gemini-2.5-flash-native-audio-preview-09-2025"
 
-config = {"response_modalities": ["AUDIO"]}
+config = {
+    "response_modalities": ["AUDIO"],
+    "speech_config": {
+        "voice_config": {"prebuilt_voice_config": {"voice_name": "Kore"}},
+        "language_code": "cmn-CN",
+    },
+    "enable_affective_dialog": True,
+}
 
 async def main():
     async with client.aio.live.connect(model=model, config=config) as session:
@@ -14,7 +21,7 @@ async def main():
         wf.setsampwidth(2)
         wf.setframerate(24000)
 
-        message = "Hello how are you?"
+        message = "Hello how are you,i am not feeling good ,could you help me?"
         await session.send_client_content(
             turns={"role": "user", "parts": [{"text": message}]}, turn_complete=True
         )
