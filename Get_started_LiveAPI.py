@@ -160,6 +160,9 @@ class AudioLoop:
         image_bytes = mss.tools.to_png(i.rgb, i.size)
         img = PIL.Image.open(io.BytesIO(image_bytes))
 
+        # Save image locally for debug
+        img.save("debug_screen.jpg", format="JPEG")
+
         image_io = io.BytesIO()
         img.save(image_io, format="jpeg")
         image_io.seek(0)
